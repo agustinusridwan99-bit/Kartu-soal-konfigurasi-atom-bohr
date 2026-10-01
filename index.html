@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Konfigurasi Elektron Atom Bohr</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    background: #f0f7ff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    color: #1e293b;
+  }
+
+  .app-container {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 36px;
+    padding: 20px 16px 24px;
+    box-shadow: 0 20px 40px rgba(0, 80, 150, 0.15), 0 0 0 1px #dbeafe;
+  }
+
+  .atom-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+    padding: 12px 10px;
+    border-radius: 60px;
+    border: 2px solid #bae6fd;
+    box-shadow: 0 4px 12px #bae6fd80;
+  }
+
+  .atom-svg {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    animation: spin 20s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .atom-header-text {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0369a1;
+    line-height: 1.3;
+  }
+
+  .atom-header-text small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: #0284c7;
+    margin-top: 2px;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .btn {
+    flex: 1;
+    background: #e0f2fe;
+    border: 2px solid #bae6fd;
+    border-radius: 60px;
+    padding: 12px 0;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: #0369a1;
+    box-shadow: 0 3px 0 #bae6fd;
+    transition: all 0.1s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn.active {
+    background: #0284c7;
+    color: white;
+    box-shadow: 0 3px 0 #075985;
+    border-color: #0284c7;
+  }
+
+  .btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #bae6fd;
+  }
+
+  .panel {
+    background: #f8fafc;
+    border-radius: 24px;
+    padding: 16px 14px;
+    border: 2px solid #e0f2fe;
+    min-height: 280px;
+    max-height: 420px;
+    overflow-y: auto;
+    color: #1e293b;
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  .panel::-webkit-scrollbar { width: 4px; }
+  .panel::-webkit-scrollbar-thumb { background: #7dd3fc; border-radius: 10px; }
+
+  h3 {
+    color: #0369a1;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 2px solid #bae6fd;
+    padding-bottom: 8px;
+  }
+
+  .rule-list { list-style: none; padding-left: 0; }
+  .rule-list li {
+    margin-bottom: 8px;
+    padding-left: 22px;
+    position: relative;
+  }
+  .rule-list li::before {
+    content: "▸";
+    color: #0284c7;
+    font-size: 1.1rem;
+    position: absolute;
+    left: 2px;
+    top: -2px;
+    font-weight: 700;
+  }
+
+  .kulit-badge {
+    display: inline-block;
+    background: #e0f2fe;
+    padding: 1px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    color: #0369a1;
+    margin-right: 4px;
+    border: 1px solid #7dd3fc;
+    font-size: 0.8rem;
+  }
+
+  .highlight-box {
+    background: #e0f2fe;
+    border-left: 5px solid #0284c7;
+    padding: 10px 12px;
+    border-radius: 12px;
+    margin: 10px 0;
+    font-weight: 500;
+  }
+
+  .tabel-kulit {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+    font-size: 0.8rem;
+  }
+
+  .tabel-kulit th {
+    background: #0284c7;
+    color: white;
+    padding: 6px 4px;
+    font-weight: 600;
+  }
+
+  .tabel-kulit td {
+    padding: 6px 4px;
+    border-bottom: 1px solid #e0f2fe;
+    text-align: center;
+  }
+
+  .tabel-kulit tr:nth-child(even) { background: #f0f9ff; }
+
+  .atom-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+    justify-content: center;
+  }
+
+  .atom-btn {
+    background: #e0f2fe;
+    border: 2px solid #7dd3fc;
+    color: #0369a1;
+    padding: 6px 12px;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 2px 0 #bae6fd;
+  }
+
+  .atom-btn.selected {
+    background: #0284c7;
+    color: white;
+    border-color: #0369a1;
+    box-shadow: 0 2px 0 #075985;
+  }
+
+  .atom-btn:active { transform: scale(0.95); }
+
+  .atom-btn.ion {
+    background: #fef3c7;
+    border-color: #fbbf24;
+    color: #92400e;
+  }
+
+  .atom-btn.ion.selected {
+    background: #f59e0b;
+    color: white;
+    border-color: #b45309;
+    box-shadow: 0 2px 0 #92400e;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 4px 4px 4px 16px;
+    border: 2px solid #bae6fd;
+  }
+
+  .input-row span {
+    font-weight: 700;
+    color: #0284c7;
+    min-width: 30px;
+  }
+
+  .input-row input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px 0;
+    font-size: 0.9rem;
+    color: #1e293b;
+    outline: none;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+  }
+
+  .input-row input::placeholder {
+    color: #94a3b8;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 400;
+  }
+
+  .submit-btn {
+    background: #0284c7;
+    border: none;
+    border-radius: 60px;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: white;
+    box-shadow: 0 4px 0 #075985;
+    cursor: pointer;
+  }
+
+  .submit-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #075985;
+  }
+
+  .feedback {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 16px;
+    font-weight: 600;
+    text-align: center;
+    font-size: 0.85rem;
+    background: #e0f2fe;
+    border-left: 5px solid #0284c7;
+    color: #0369a1;
+  }
+
+  .feedback.correct {
+    border-left-color: #16a34a;
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  .feedback.wrong {
+    border-left-color: #dc2626;
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .petunjuk-step {
+    background: #f0f9ff;
+    border-radius: 16px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    border-left: 4px solid #0284c7;
+    font-size: 0.85rem;
+  }
+
+  .petunjuk-step strong { color: #0369a1; }
+
+  .small-note {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  .hidden { display: none !important; }
+
+  code {
+    background: #e0f2fe;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    color: #0369a1;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+
+  .highlight { color: #ea580c; font-weight: 700; }
+
+  .contoh-box {
+    background: #fff7ed;
+    border: 1px dashed #fdba74;
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin: 6px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: #9a3412;
+  }
+
+  .divider-label {
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #92400e;
+    margin: 4px 0 2px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="app-container">
+
+  <div class="atom-header">
+    <svg class="atom-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="42" fill="none" stroke="#7dd3fc" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="50" cy="50" r="30" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="50" cy="50" r="18" fill="none" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="50" cy="50" r="8" fill="#f97316"/>
+      <circle cx="50" cy="50" r="5" fill="#fb923c"/>
+      <circle cx="50" cy="32" r="3" fill="#0284c7"/>
+      <circle cx="50" cy="68" r="3" fill="#0284c7"/>
+      <circle cx="50" cy="20" r="2.5" fill="#38bdf8"/>
+      <circle cx="80" cy="50" r="2.5" fill="#38bdf8"/>
+      <circle cx="50" cy="80" r="2.5" fill="#38bdf8"/>
+      <circle cx="20" cy="50" r="2.5" fill="#38bdf8"/>
+      <circle cx="50" cy="8" r="2" fill="#7dd3fc"/>
+      <circle cx="92" cy="50" r="2" fill="#7dd3fc"/>
+      <circle cx="50" cy="92" r="2" fill="#7dd3fc"/>
+      <circle cx="8" cy="50" r="2" fill="#7dd3fc"/>
+      <circle cx="78" cy="22" r="2" fill="#7dd3fc"/>
+      <circle cx="22" cy="78" r="2" fill="#7dd3fc"/>
+    </svg>
+    <div class="atom-header-text">
+      ⚛️ Konfigurasi Elektron Bohr
+      <small>Kulit K, L, M, N dan aturan pengisiannya</small>
+    </div>
+  </div>
+
+  <div class="button-group">
+    <button id="btnMateri" class="btn active" type="button" data-panel="materi">📘 Materi</button>
+    <button id="btnPetunjuk" class="btn" type="button" data-panel="petunjuk">📋 Petunjuk</button>
+    <button id="btnSoal" class="btn" type="button" data-panel="soal">🎯 Soal</button>
+  </div>
+
+  <!-- Panel Materi -->
+  <div id="panelMateri" class="panel">
+    <h3>📖 Model Atom Bohr: Kulit Elektron</h3>
+    <p>Menurut Teori Atom Bohr, elektron berada dalam lintasan (orbit) tertentu yang disebut <strong>kulit elektron</strong>, diberi lambang <span class="kulit-badge">K</span><span class="kulit-badge">L</span><span class="kulit-badge">M</span><span class="kulit-badge">N</span> dihitung dari inti atom.</p>
+
+    <div class="highlight-box">
+      <strong>Rumus jumlah elektron maksimum per kulit:</strong><br>
+      <code>Σ maksimum = 2n²</code>
+    </div>
+
+    <table class="tabel-kulit">
+      <tr><th>Nomor Kulit (n)</th><th>Lambang</th><th>Elektron Maks (2n²)</th></tr>
+      <tr><td>1</td><td>K</td><td>2</td></tr>
+      <tr><td>2</td><td>L</td><td>8</td></tr>
+      <tr><td>3</td><td>M</td><td>18</td></tr>
+      <tr><td>4</td><td>N</td><td>32</td></tr>
+    </table>
+    <p style="font-size:0.8rem; color:#475569;">Contoh: kulit ke-3 (M) → 2×3² = <strong>18 elektron</strong>.</p>
+
+    <h3 style="margin-top:14px;">🔹 Aturan Pengisian Kulit K dan L</h3>
+    <ul class="rule-list">
+      <li><span class="kulit-badge">K</span> Diisi 2 elektron jika tersedia ≥ 2. Khusus <strong>Hidrogen (H)</strong> diisi 1 elektron.</li>
+      <li><span class="kulit-badge">L</span> Diisi 8 elektron jika tersedia ≥ 8. Jika tersedia &lt; 8, diisi sisa elektron.</li>
+    </ul>
+    <div class="contoh-box">₃Li : 2, 1 → K=2, L=1</div>
+    <div class="contoh-box">₁₂Mg : 2, 8, 2 → K=2, L=8, M=2</div>
+
+    <h3 style="margin-top:14px;">🔸 Aturan Pengisian Kulit M dan N</h3>
+    <ul class="rule-list">
+      <li><span class="kulit-badge">M</span> 18 e⁻ jika tersedia &gt; 18; 8 e⁻ jika 8 ≤ e⁻ &lt; 18; sisa jika e⁻ &lt; 8.</li>
+      <li><span class="kulit-badge">N</span> 32 e⁻ jika tersedia &gt; 32; 18 e⁻ jika 18 ≤ e⁻ &lt; 32; 8 e⁻ jika 8 ≤ e⁻ &lt; 18; sisa jika &lt; 8.</li>
+    </ul>
+    <div class="contoh-box">₂₀Ca : 2, 8, 8, 2</div>
+    <div class="contoh-box">₁₇Cl : 2, 8, 7</div>
+    <div class="contoh-box">₃₆Kr : 2, 8, 18, 8</div>
+    <div class="contoh-box">₃₈Sr : 2, 8, 18, 8, 2</div>
+
+    <h3 style="margin-top:14px;">⚡ Konfigurasi Ion</h3>
+    <ul class="rule-list">
+      <li><strong>Ion positif (kation)</strong> → atom <em>melepas</em> elektron. Contoh: Na⁺ (11−1 = 10 e⁻) → 2, 8.</li>
+      <li><strong>Ion negatif (anion)</strong> → atom <em>menangkap</em> elektron. Contoh: Cl⁻ (17+1 = 18 e⁻) → 2, 8, 8.</li>
+    </ul>
+  </div>
+
+  <!-- Panel Petunjuk -->
+  <div id="panelPetunjuk" class="panel hidden">
+    <h3>📋 Petunjuk Bermain</h3>
+    <div class="petunjuk-step"><strong>1.</strong> Pilih atom atau ion yang ingin kamu tantang dengan menekan tombol unsur di panel Soal.</div>
+    <div class="petunjuk-step"><strong>2.</strong> Tentukan konfigurasi elektron berdasarkan aturan Bohr (K, L, M, N).</div>
+    <div class="petunjuk-step"><strong>3.</strong> <strong>Untuk ion:</strong> hitung dulu jumlah elektronnya (kation = nomor atom − muatan, anion = nomor atom + muatan).</div>
+    <div class="petunjuk-step"><strong>4.</strong> Tulis jawabanmu dengan format: <code>2, 8, 1</code> (angka dipisahkan koma dan spasi).</div>
+    <div class="petunjuk-step"><strong>5.</strong> Tekan tombol <span class="highlight">Periksa Jawaban</span> untuk melihat feedback.</div>
+    <div class="petunjuk-step"><strong>6.</strong> Jika benar, kamu bisa memilih atom/ion lain. Jika salah, coba lagi!</div>
+    <p class="small-note">💡 Contoh: Na → 2, 8, 1. Na⁺ → 2, 8. Cl⁻ → 2, 8, 8.</p>
+  </div>
+
+  <!-- Panel Soal -->
+  <div id="panelSoal" class="panel hidden">
+    <h3>🎯 Soal Tantangan</h3>
+    <p style="margin-bottom: 10px; font-size: 0.8rem;">Pilih atom/ion, lalu tulis konfigurasi elektronnya:</p>
+
+    <div class="atom-selector" id="atomSelector">
+      <!-- Atom netral -->
+      <button class="atom-btn" data-atom="H" data-nomor="1" type="button">H (1)</button>
+      <button class="atom-btn" data-atom="He" data-nomor="2" type="button">He (2)</button>
+      <button class="atom-btn" data-atom="Li" data-nomor="3" type="button">Li (3)</button>
+      <button class="atom-btn" data-atom="Be" data-nomor="4" type="button">Be (4)</button>
+      <button class="atom-btn" data-atom="C" data-nomor="6" type="button">C (6)</button>
+      <button class="atom-btn" data-atom="O" data-nomor="8" type="button">O (8)</button>
+      <button class="atom-btn" data-atom="F" data-nomor="9" type="button">F (9)</button>
+      <button class="atom-btn selected" data-atom="Na" data-nomor="11" type="button">Na (11)</button>
+      <button class="atom-btn" data-atom="Mg" data-nomor="12" type="button">Mg (12)</button>
+      <button class="atom-btn" data-atom="Al" data-nomor="13" type="button">Al (13)</button>
+      <button class="atom-btn" data-atom="Si" data-nomor="14" type="button">Si (14)</button>
+      <button class="atom-btn" data-atom="S" data-nomor="16" type="button">S (16)</button>
+      <button class="atom-btn" data-atom="Cl" data-nomor="17" type="button">Cl (17)</button>
+      <button class="atom-btn" data-atom="Ar" data-nomor="18" type="button">Ar (18)</button>
+      <button class="atom-btn" data-atom="K" data-nomor="19" type="button">K (19)</button>
+      <button class="atom-btn" data-atom="Ca" data-nomor="20" type="button">Ca (20)</button>
+      <button class="atom-btn" data-atom="Ge" data-nomor="32" type="button">Ge (32)</button>
+      <button class="atom-btn" data-atom="Kr" data-nomor="36" type="button">Kr (36)</button>
+      <button class="atom-btn" data-atom="Rb" data-nomor="37" type="button">Rb (37)</button>
+      <button class="atom-btn" data-atom="Sr" data-nomor="38" type="button">Sr (38)</button>
+      <button class="atom-btn" data-atom="Sb" data-nomor="51" type="button">Sb (51)</button>
+      <button class="atom-btn" data-atom="I" data-nomor="53" type="button">I (53)</button>
+      <button class="atom-btn" data-atom="Pb" data-nomor="82" type="button">Pb (82)</button>
+      <button class="atom-btn" data-atom="Po" data-nomor="84" type="button">Po (84)</button>
+      <button class="atom-btn" data-atom="Rn" data-nomor="86" type="button">Rn (86)</button>
+
+      <!-- Label ion -->
+      <div class="divider-label">⚡ ION</div>
+
+      <!-- Ion positif (kation) -->
+      <button class="atom-btn ion" data-atom="Na+" data-nomor="11" type="button">Na⁺</button>
+      <button class="atom-btn ion" data-atom="Mg2+" data-nomor="12" type="button">Mg²⁺</button>
+      <button class="atom-btn ion" data-atom="Al3+" data-nomor="13" type="button">Al³⁺</button>
+      <button class="atom-btn ion" data-atom="Ca2+" data-nomor="20" type="button">Ca²⁺</button>
+
+      <!-- Ion negatif (anion) -->
+      <button class="atom-btn ion" data-atom="F-" data-nomor="9" type="button">F⁻</button>
+      <button class="atom-btn ion" data-atom="O2-" data-nomor="8" type="button">O²⁻</button>
+      <button class="atom-btn ion" data-atom="Cl-" data-nomor="17" type="button">Cl⁻</button>
+      <button class="atom-btn ion" data-atom="Br-" data-nomor="35" type="button">Br⁻</button>
+    </div>
+
+    <div id="soalArea">
+      <p id="soalTeks" style="font-weight: 600; margin-bottom: 8px; font-size:0.9rem;">
+        Konfigurasi elektron <span id="atomLabel">₁₁Na</span> adalah ...
+      </p>
+      <div class="input-group">
+        <div class="input-row">
+          <span>🔹</span>
+          <input type="text" id="jawabanInput" placeholder="contoh: 2, 8, 1" autocomplete="off">
+        </div>
+        <button class="submit-btn" id="periksaBtn" type="button">✅ Periksa Jawaban</button>
+      </div>
+      <div id="feedbackBox" class="feedback hidden"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  const STORAGE_KEY = 'konfigurasi_bohr_data_v6';
+
+  // ============================================================
+  // DATA ATOM & ION
+  // ============================================================
+  // konfigurasi = konfigurasi elektron berdasarkan jumlah elektron
+  //   - Atom netral: jumlah elektron = nomor atom
+  //   - Kation (+): jumlah elektron = nomor atom - muatan
+  //   - Anion (-): jumlah elektron = nomor atom + muatan
+  // ============================================================
+  const atomData = {
+    // ---- ATOM NETRAL ----
+    H:   { nomor: 1,  elektron: 1,  konfigurasi: '1',                    label: '₁H'  },
+    He:  { nomor: 2,  elektron: 2,  konfigurasi: '2',                    label: '₂He' },
+    Li:  { nomor: 3,  elektron: 3,  konfigurasi: '2, 1',                 label: '₃Li' },
+    Be:  { nomor: 4,  elektron: 4,  konfigurasi: '2, 2',                 label: '₄Be' },
+    C:   { nomor: 6,  elektron: 6,  konfigurasi: '2, 4',                 label: '₆C'  },
+    O:   { nomor: 8,  elektron: 8,  konfigurasi: '2, 6',                 label: '₈O'  },
+    F:   { nomor: 9,  elektron: 9,  konfigurasi: '2, 7',                 label: '₉F'  },
+    Na:  { nomor: 11, elektron: 11, konfigurasi: '2, 8, 1',              label: '₁₁Na' },
+    Mg:  { nomor: 12, elektron: 12, konfigurasi: '2, 8, 2',              label: '₁₂Mg' },
+    Al:  { nomor: 13, elektron: 13, konfigurasi: '2, 8, 3',              label: '₁₃Al' },
+    Si:  { nomor: 14, elektron: 14, konfigurasi: '2, 8, 4',              label: '₁₄Si' },
+    S:   { nomor: 16, elektron: 16, konfigurasi: '2, 8, 6',              label: '₁₆S'  },
+    Cl:  { nomor: 17, elektron: 17, konfigurasi: '2, 8, 7',              label: '₁₇Cl' },
+    Ar:  { nomor: 18, elektron: 18, konfigurasi: '2, 8, 8',              label: '₁₈Ar' },
+    K:   { nomor: 19, elektron: 19, konfigurasi: '2, 8, 8, 1',           label: '₁₉K'  },
+    Ca:  { nomor: 20, elektron: 20, konfigurasi: '2, 8, 8, 2',           label: '₂₀Ca' },
+    Ge:  { nomor: 32, elektron: 32, konfigurasi: '2, 8, 18, 4',          label: '₃₂Ge' },
+    Kr:  { nomor: 36, elektron: 36, konfigurasi: '2, 8, 18, 8',          label: '₃₆Kr' },
+    Rb:  { nomor: 37, elektron: 37, konfigurasi: '2, 8, 18, 8, 1',       label: '₃₇Rb' },
+    Sr:  { nomor: 38, elektron: 38, konfigurasi: '2, 8, 18, 8, 2',       label: '₃₈Sr' },
+    Sb:  { nomor: 51, elektron: 51, konfigurasi: '2, 8, 18, 18, 5',      label: '₅₁Sb' },
+    I:   { nomor: 53, elektron: 53, konfigurasi: '2, 8, 18, 18, 7',      label: '₅₃I'  },
+    Pb:  { nomor: 82, elektron: 82, konfigurasi: '2, 8, 18, 32, 18, 4',  label: '₈₂Pb' },
+    Po:  { nomor: 84, elektron: 84, konfigurasi: '2, 8, 18, 32, 18, 6',  label: '₈₄Po' },
+    Rn:  { nomor: 86, elektron: 86, konfigurasi: '2, 8, 18, 32, 18, 8',  label: '₈₆Rn' },
+
+    // ---- KATION (ion positif) ----
+    'Na+':  { nomor: 11, elektron: 10, konfigurasi: '2, 8',              label: 'Na⁺'  },
+    'Mg2+': { nomor: 12, elektron: 10, konfigurasi: '2, 8',              label: 'Mg²⁺' },
+    'Al3+': { nomor: 13, elektron: 10, konfigurasi: '2, 8',              label: 'Al³⁺' },
+    'Ca2+': { nomor: 20, elektron: 18, konfigurasi: '2, 8, 8',           label: 'Ca²⁺' },
+
+    // ---- ANION (ion negatif) ----
+    'F-':  { nomor: 9,  elektron: 10, konfigurasi: '2, 8',               label: 'F⁻'  },
+    'O2-': { nomor: 8,  elektron: 10, konfigurasi: '2, 8',               label: 'O²⁻' },
+    'Cl-': { nomor: 17, elektron: 18, konfigurasi: '2, 8, 8',            label: 'Cl⁻' },
+    'Br-': { nomor: 35, elektron: 36, konfigurasi: '2, 8, 18, 8',        label: 'Br⁻' }
+  };
+
+  // ============================================================
+  // PENYIMPANAN (localStorage / JSON)
+  // ============================================================
+  function initStorage() {
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        lastAtom: 'Na', jawabanTerakhir: '', skor: 0, riwayat: []
+      }));
+    }
+  }
+  function getStorageData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : { lastAtom: 'Na', jawabanTerakhir: '', skor: 0, riwayat: [] };
+    } catch(e) {
+      return { lastAtom: 'Na', jawabanTerakhir: '', skor: 0, riwayat: [] };
+    }
+  }
+  function saveStorageData(data) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
+  }
+  function simpanAtomTerpilih(atomSymbol) {
+    const data = getStorageData();
+    data.lastAtom = atomSymbol;
+    saveStorageData(data);
+  }
+  function simpanJawaban(atomSymbol, jawaban, benar) {
+    const data = getStorageData();
+    data.jawabanTerakhir = jawaban;
+    data.riwayat.push({ atom: atomSymbol, jawaban: jawaban, benar: benar, waktu: new Date().toISOString() });
+    if (data.riwayat.length > 30) data.riwayat.shift();
+    if (benar) data.skor = (data.skor || 0) + 1;
+    saveStorageData(data);
+  }
+
+  let currentAtomSymbol = 'Na';
+
+  // ============================================================
+  // NAVIGASI PANEL
+  // ============================================================
+  function setActivePanel(panelName) {
+    const btnMateri     = document.getElementById('btnMateri');
+    const btnPetunjuk   = document.getElementById('btnPetunjuk');
+    const btnSoal       = document.getElementById('btnSoal');
+    const panelMateri   = document.getElementById('panelMateri');
+    const panelPetunjuk = document.getElementById('panelPetunjuk');
+    const panelSoal     = document.getElementById('panelSoal');
+
+    if (!btnMateri || !btnPetunjuk || !btnSoal) return;
+    if (!panelMateri || !panelPetunjuk || !panelSoal) return;
+
+    [btnMateri, btnPetunjuk, btnSoal].forEach(b => b.classList.remove('active'));
+    [panelMateri, panelPetunjuk, panelSoal].forEach(p => p.classList.add('hidden'));
+
+    if (panelName === 'materi') {
+      btnMateri.classList.add('active');
+      panelMateri.classList.remove('hidden');
+    } else if (panelName === 'petunjuk') {
+      btnPetunjuk.classList.add('active');
+      panelPetunjuk.classList.remove('hidden');
+    } else if (panelName === 'soal') {
+      btnSoal.classList.add('active');
+      panelSoal.classList.remove('hidden');
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('[data-panel]');
+    if (target) {
+      e.preventDefault();
+      setActivePanel(target.getAttribute('data-panel'));
+    }
+  });
+
+  // ============================================================
+  // SOAL
+  // ============================================================
+  function updateSoalTeks() {
+    const soalTeks = document.getElementById('soalTeks');
+    if (!soalTeks) return;
+    const data = atomData[currentAtomSymbol];
+    if (data) {
+      const infoElektron = data.elektron !== data.nomor
+        ? ' <em style="color:#92400e; font-weight:400;">(jumlah e⁻ = ' + data.elektron + ')</em>'
+        : '';
+      soalTeks.innerHTML = 'Konfigurasi elektron <span id="atomLabel">' + data.label + '</span>' + infoElektron + ' adalah ...';
+    }
+  }
+
+  function normalisasiJawaban(str) {
+    return str.replace(/\s+/g, '')
+              .replace(/[^0-9,]/g, '')
+              .replace(/,+/g, ',')
+              .replace(/^,|,$/g, '');
+  }
+
+  function periksaJawaban() {
+    const jawabanInput = document.getElementById('jawabanInput');
+    const feedbackBox = document.getElementById('feedbackBox');
+    if (!jawabanInput || !feedbackBox) return;
+
+    const jawabanUser = jawabanInput.value.trim();
+    if (!jawabanUser) {
+      feedbackBox.textContent = '⚠️ Tulis jawabanmu terlebih dahulu.';
+      feedbackBox.className = 'feedback wrong';
+      feedbackBox.classList.remove('hidden');
+      return;
+    }
+
+    const data = atomData[currentAtomSymbol];
+    if (!data) return;
+
+    const konfigBenar = data.konfigurasi;
+    const normalUser  = normalisasiJawaban(jawabanUser);
+    const normalBenar = normalisasiJawaban(konfigBenar);
+
+    const arrUser  = normalUser.split(',').filter(s => s !== '').map(Number);
+    const arrBenar = normalBenar.split(',').filter(s => s !== '').map(Number);
+
+    let benar = false;
+    if (arrUser.length === arrBenar.length) {
+      benar = arrUser.every((val, idx) => val === arrBenar[idx]);
+    }
+
+    if (benar) {
+      feedbackBox.textContent = '✅ Benar! Konfigurasi ' + data.label + ' adalah ' + konfigBenar + '. Hebat!';
+      feedbackBox.className = 'feedback correct';
+      feedbackBox.classList.remove('hidden');
+    } else {
+      feedbackBox.textContent = '❌ Belum tepat. Jawaban benar: ' + konfigBenar + '.';
+      feedbackBox.className = 'feedback wrong';
+      feedbackBox.classList.remove('hidden');
+    }
+
+    simpanJawaban(currentAtomSymbol, jawabanUser, benar);
+  }
+
+  // ============================================================
+  // EVENT DELEGATION: tombol atom & tombol periksa
+  // ============================================================
+  document.addEventListener('click', function(e) {
+    const atomBtn = e.target.closest('.atom-btn');
+    if (atomBtn) {
+      e.preventDefault();
+      const symbol = atomBtn.getAttribute('data-atom');
+      if (!symbol || !atomData[symbol]) return;
+
+      document.querySelectorAll('.atom-btn').forEach(b => b.classList.remove('selected'));
+      atomBtn.classList.add('selected');
+
+      currentAtomSymbol = symbol;
+      simpanAtomTerpilih(symbol);
+      updateSoalTeks();
+
+      const jawabanInput = document.getElementById('jawabanInput');
+      const feedbackBox = document.getElementById('feedbackBox');
+      if (jawabanInput) jawabanInput.value = '';
+      if (feedbackBox) {
+        feedbackBox.classList.add('hidden');
+        feedbackBox.classList.remove('correct', 'wrong');
+      }
+
+      const storage = getStorageData();
+      const riwayatAtom = storage.riwayat.filter(r => r.atom === symbol);
+      if (riwayatAtom.length > 0 && jawabanInput) {
+        jawabanInput.value = riwayatAtom[riwayatAtom.length - 1].jawaban || '';
+      }
+      return;
+    }
+
+    if (e.target.closest('#periksaBtn')) {
+      e.preventDefault();
+      periksaJawaban();
+    }
+  });
+
+  document.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && e.target && e.target.id === 'jawabanInput') {
+      e.preventDefault();
+      periksaJawaban();
+    }
+  });
+
+  // ============================================================
+  // INISIALISASI
+  // ============================================================
+  function init() {
+    initStorage();
+
+    const storage = getStorageData();
+    const lastAtom = (storage.lastAtom && atomData[storage.lastAtom]) ? storage.lastAtom : 'Na';
+    currentAtomSymbol = lastAtom;
+
+    document.querySelectorAll('.atom-btn').forEach(function(btn) {
+      if (btn.getAttribute('data-atom') === lastAtom) btn.classList.add('selected');
+      else btn.classList.remove('selected');
+    });
+
+    const jawabanInput = document.getElementById('jawabanInput');
+    const riwayatAtom = storage.riwayat.filter(r => r.atom === lastAtom);
+    if (riwayatAtom.length > 0 && jawabanInput) {
+      jawabanInput.value = riwayatAtom[riwayatAtom.length - 1].jawaban || '';
+    }
+
+    updateSoalTeks();
+    console.log('✅ Aplikasi siap dengan atom + ion.');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+</body>
+</html>
